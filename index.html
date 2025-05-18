@@ -366,7 +366,15 @@
 
         function selectOption(optionIndex) {
             questions[currentQuestionIndex].answer = optionIndex;
-            showQuestion(); // 更新选项按钮的样式
+            
+            // 立即跳转到下一题或结果页面
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion();
+            } else {
+                document.getElementById('progress-text').style.display = 'none';
+                calculateResult();
+            }
         }
 
         function prevQuestion() {
@@ -380,10 +388,6 @@
             if (currentQuestionIndex < questions.length - 1) {
                 currentQuestionIndex++;
                 showQuestion();
-            } else {
-                // 如果已经是最后一题，直接计算结果
-                document.getElementById('progress-text').style.display = 'none';
-                calculateResult();
             }
         }
 
