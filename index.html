@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MBTI 测试</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MBTI测试 - 可分享链接</title>
     <style>
         :root {
             --bg-gradient-start: #f9d5e5;
@@ -30,6 +30,7 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            touch-action: manipulation;
         }
 
         h1 {
@@ -131,6 +132,31 @@
                 opacity: 0;
             }
         }
+
+        @media screen and (max-width: 768px) {
+            #question-card, #result {
+                padding: 20px;
+            }
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            background-color: #ffccbc;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 
@@ -144,6 +170,10 @@
         <p id="question"></p>
         <button class="option" id="option1" onclick="selectOption(0)"></button>
         <button class="option" id="option2" onclick="selectOption(1)"></button>
+        <div class="navigation">
+            <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">上一个</button>
+            <button class="nav-btn" id="next-btn" onclick="nextQuestion()">下一个</button>
+        </div>
     </div>
     <div id="result">
         <h2 id="result-title"></h2>
@@ -152,7 +182,7 @@
     </div>
 
     <script>
-        // 扩展后的题目库，共20题
+        // 扩展到20题的MBTI测试
         const questions = [
             {
                 question: "当你参加社交活动时，你通常是？",
@@ -225,74 +255,74 @@
                 score1: "P"
             },
             {
-                question: "面对新环境，你通常会？",
-                options: ["很快适应并探索新事物", "需要时间适应，逐渐熟悉"],
-                dimension: "EI",
-                score0: "E",
-                score1: "I"
-            },
-            {
-                question: "在解决问题时，你更看重？",
-                options: ["逻辑和理性分析", "考虑他人感受和需求"],
+                question: "在处理问题时，你更看重？",
+                options: ["逻辑和理性", "情感和人际关系"],
                 dimension: "TF",
                 score0: "T",
                 score1: "F"
             },
             {
-                question: "你更倾向于？",
-                options: ["关注现实和具体细节", "关注未来和可能性"],
+                question: "你更倾向于如何获取信息？",
+                options: ["通过观察和实际经验", "通过思考和理论分析"],
                 dimension: "SN",
                 score0: "S",
                 score1: "N"
             },
             {
-                question: "当你计划一次旅行时，你会？",
-                options: ["提前详细规划好一切", "随性而行，灵活安排"],
+                question: "当需要做计划时，你通常会？",
+                options: ["制定详细的计划并严格执行", "灵活应对，根据情况调整"],
                 dimension: "JP",
                 score0: "J",
                 score1: "P"
             },
             {
-                question: "在聚会中，你通常会？",
-                options: ["参与很多人的对话，活跃气氛", "和少数人深入交流"],
+                question: "你更喜欢哪种类型的聚会？",
+                options: ["热闹的大型聚会", "小型的私密聚会"],
                 dimension: "EI",
                 score0: "E",
                 score1: "I"
             },
             {
-                question: "当需要做一个重要决定时，你会？",
-                options: ["权衡利弊后迅速决定", "反复思考，谨慎决定"],
-                dimension: "JP",
-                score0: "J",
-                score1: "P"
-            },
-            {
-                question: "你更欣赏哪种品质？",
-                options: ["果断和坚定", "善良和体贴"],
+                question: "当面对批评时，你会？",
+                options: ["客观分析并改进", "感到受伤并需要时间调整"],
                 dimension: "TF",
                 score0: "T",
                 score1: "F"
             },
             {
-                question: "你更倾向于？",
-                options: ["按照计划有序进行", "灵活应对变化"],
-                dimension: "JP",
-                score0: "J",
-                score1: "P"
-            },
-            {
-                question: "你更喜欢学习？",
-                options: ["事实和数据", "概念和理论"],
+                question: "你更关注生活中的？",
+                options: ["具体的细节和事实", "整体的意义和模式"],
                 dimension: "SN",
                 score0: "S",
                 score1: "N"
             },
             {
-                question: "当你有空闲时间时，你更可能？",
-                options: ["参加社交活动", "独自放松或思考"],
+                question: "在做决定前，你通常会？",
+                options: ["仔细权衡各种可能性", "凭直觉快速做出决定"],
+                dimension: "JP",
+                score0: "J",
+                score1: "P"
+            },
+            {
+                question: "你更喜欢哪种工作环境？",
+                options: ["有明确的规则和结构", "灵活自由的氛围"],
+                dimension: "JP",
+                score0: "J",
+                score1: "P"
+            },
+            {
+                question: "你通常如何表达自己的情感？",
+                options: ["直接表达", "含蓄内敛"],
                 dimension: "EI",
                 score0: "E",
                 score1: "I"
+            },
+            {
+                question: "你更倾向于？",
+                options: ["关注现实，注重实际", "关注未来，富有想象力"],
+                dimension: "SN",
+                score0: "S",
+                score1: "N"
             }
         ];
 
@@ -304,23 +334,54 @@
             const option2Element = document.getElementById('option2');
             const progressTextElement = document.getElementById('progress-text');
             const progressElement = document.getElementById('progress');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
 
             const currentQuestion = questions[currentQuestionIndex];
             questionElement.textContent = currentQuestion.question;
             option1Element.textContent = currentQuestion.options[0];
             option2Element.textContent = currentQuestion.options[1];
 
+            // 恢复选项按钮的默认样式
+            option1Element.style.backgroundColor = '';
+            option2Element.style.backgroundColor = '';
+            
+            // 如果该问题已有答案，高亮显示
+            if (currentQuestion.answer === 0) {
+                option1Element.style.backgroundColor = '#ff8a80';
+            } else if (currentQuestion.answer === 1) {
+                option2Element.style.backgroundColor = '#ff8a80';
+            }
+
             const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
             progressElement.style.width = `${progress}%`;
             progressTextElement.textContent = `${currentQuestionIndex + 1}/${questions.length}`;
+
+            // 控制上一个/下一个按钮的显示状态
+            prevBtn.disabled = currentQuestionIndex === 0;
+            prevBtn.style.opacity = currentQuestionIndex === 0 ? '0.5' : '1';
+            nextBtn.disabled = currentQuestionIndex === questions.length - 1;
+            nextBtn.style.opacity = currentQuestionIndex === questions.length - 1 ? '0.5' : '1';
         }
 
         function selectOption(optionIndex) {
             questions[currentQuestionIndex].answer = optionIndex;
-            currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
+            showQuestion(); // 更新选项按钮的样式
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
                 showQuestion();
             } else {
+                // 如果已经是最后一题，直接计算结果
                 document.getElementById('progress-text').style.display = 'none';
                 calculateResult();
             }
